@@ -1,16 +1,28 @@
 <template>
-  <div class="justify-center flex bg-yellow-300 items-center h-screen">
-    <div class="text-4xl">{{ msg }} 👋🏼</div>
-  </div>
+  <button @click="store.Increse(1)">숫자 더하기</button>
+  <p>state: {{ store.testNumber }}</p>
+  <h2>getters: {{ store.getCurrentNumber }}</h2>
 </template>
+<script setup lang="ts">
+import { useTestStore } from "@/store/test";
 
-<script lang="ts">
-import { defineComponent } from "vue";
-
-export default defineComponent({
-  name: "HelloWorld",
-  props: {
-    msg: String,
-  },
-});
+const store = useTestStore();
 </script>
+
+<style scoped>
+a {
+  color: #42b983;
+}
+
+label {
+  margin: 0 0.5em;
+  font-weight: bold;
+}
+
+code {
+  background-color: #eee;
+  padding: 2px 4px;
+  border-radius: 4px;
+  color: #304455;
+}
+</style>
