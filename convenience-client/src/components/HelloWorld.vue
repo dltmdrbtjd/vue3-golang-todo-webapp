@@ -1,7 +1,12 @@
 <template>
-  <button @click="store.Increse(1)">숫자 더하기</button>
-  <p>state: {{ store.testNumber }}</p>
-  <h2>getters: {{ store.getCurrentNumber }}</h2>
+  <button
+    class="bg-sky-600 text-stone-50 px-2 py-1 rounded-md"
+    @click="store.Increse(1)"
+  >
+    숫자 더하기
+  </button>
+  <p class="text-white">state: {{ store.testNumber }}</p>
+  <h2 class="text-white">getters: {{ store.getCurrentNumber }}</h2>
 </template>
 <script setup lang="ts">
 import { useTestStore } from "@/store/test";
