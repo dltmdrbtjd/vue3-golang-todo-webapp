@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 
+	"github.com/Convenience-Tools/convenience-server/configs"
 	"github.com/Convenience-Tools/convenience-server/pkg/middleware"
 	"github.com/Convenience-Tools/convenience-server/pkg/routers"
 	"github.com/gin-gonic/gin"
@@ -14,6 +15,7 @@ func main() {
 	r.Use(middleware.CORSMiddleware())
 	r.Use(middleware.JSONMiddleware())
 
+	configs.ConnectDB()
 	routers.TestRoutes(r)
 
 	if err := r.Run(":8081"); err != nil {
