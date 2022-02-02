@@ -16,7 +16,7 @@ func main() {
 	r.Use(middleware.JSONMiddleware())
 
 	configs.ConnectDB()
-	routers.TestRoutes(r)
+	routers.TodoRoutes(r)
 
 	if err := r.Run(":8081"); err != nil {
 		fmt.Printf("failed server start, err%v\n", err)
