@@ -2,6 +2,7 @@ package services
 
 import (
 	"context"
+	"encoding/json"
 	"log"
 	"time"
 
@@ -20,9 +21,8 @@ func CreateTodoService(todo models.Todo) (models.Todo, error) {
 	defer cancel()
 
 	newTodo := models.Todo{
-		Id:       primitive.NewObjectID(),
 		Title:    todo.Title,
-		Status:   "Ready",
+		Status:   false,
 		Content:  todo.Content,
 		UserName: todo.UserName,
 	}
@@ -65,11 +65,11 @@ func GetTodoListService(userName string) ([]*models.Todo, error) {
 	return todoList, err
 }
 
-func DeleteTodoService(objId string) error {
+func DeleteTodoService(objId primitive.ObjectID) error {
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
 
-	result, err := todoCollection.DeleteOne(ctx, bson.M{"id": objId})
+	result, err := todoCollection.DeleteOne(ctx, bson.M{"_id": objId})
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -79,4 +79,67 @@ func DeleteTodoService(objId string) error {
 	}
 
 	return err
+}
+
+func EditTodoService(objId primitive.ObjectID, editTodo models.UpdateTodo) (*models.UpdateTodo, error) {
+	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+	defer cancel()
+
+	currentTodo := findOneTodoItem(objId)
+
+	if editTodo.Content == "" {
+		editTodo.Content = currentTodo.Content
+	}
+	if editTodo.Title == "" {
+		editTodo.Title = currentTodo.Title
+	}
+	if editTodo.UserName == "" {
+		editTodo.UserName = currentTodo.UserName
+	}
+
+	update := bson.M{"title": editTodo.Title, "content": editTodo.Content, "username": editTodo.UserName}
+	result, err := todoCollection.UpdateOne(ctx, bson.M{"_id": objId}, bson.M{"$set": update})
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	var updatedTodo *models.UpdateTodo
+	if result.MatchedCount == 1 {
+		err := todoCollection.FindOne(ctx, bson.M{"_id": objId}).Decode(&updatedTodo)
+		if err != nil {
+			log.Fatal(err)
+		}
+	}
+
+	return updatedTodo, err
+}
+
+func findOneTodoItem(objId primitive.ObjectID) *models.Todo {
+	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+	defer cancel()
+
+	var todo *models.Todo
+	err := todoCollection.FindOne(ctx, bson.M{"_id": objId}).Decode(&todo)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	return todo
+}
+
+func TodoStatusChangeService(objId primitive.ObjectID, status models.TodoStatus) (bool, error) {
+	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+	defer cancel()
+
+	// var newStatus models.TodoStatus
+	json.Marshal(status.Status)
+
+	updateStatus := bson.M{"status": bool(status.Status)}
+
+	_, err := todoCollection.UpdateOne(ctx, bson.M{"_id": objId}, bson.M{"$set": updateStatus})
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	return status.Status, err
 }
