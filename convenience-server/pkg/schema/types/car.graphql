@@ -1,0 +1,5 @@
+type Car {
+  name: String!
+  price: Int!
+  create_at: String!
+}
