@@ -3,6 +3,7 @@ package services
 import (
 	"context"
 	"encoding/json"
+	"fmt"
 	"log"
 	"time"
 
@@ -20,11 +21,15 @@ func CreateTodoService(todo models.Todo) (models.Todo, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
 
+	t := time.Now()
+	timeFormat := fmt.Sprintf("%d-%02d-%02d", t.Year(), t.Month(), t.Day())
+
 	newTodo := models.Todo{
 		Title:    todo.Title,
 		Status:   false,
 		Content:  todo.Content,
 		UserName: todo.UserName,
+		CreateAt: timeFormat,
 	}
 
 	_, err := todoCollection.InsertOne(ctx, newTodo)
