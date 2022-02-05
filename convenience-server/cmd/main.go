@@ -17,7 +17,6 @@ func main() {
 
 	configs.ConnectDB()
 	routes.TodoRoutes(r)
-	routes.GraphQLRouter(r)
 
 	if err := r.Run(":8081"); err != nil {
 		fmt.Printf("failed server start, err%v\n", err)
