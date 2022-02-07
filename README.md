@@ -1,3 +1,4 @@
 # Convenience-Tools
 
-git config change test commit
+## Wiki
+- https://github.com/dltmdrbtjd/Convenience-Tools/wiki
