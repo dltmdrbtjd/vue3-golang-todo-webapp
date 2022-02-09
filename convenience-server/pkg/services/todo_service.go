@@ -25,8 +25,9 @@ func CreateTodoService(todo models.Todo) (models.Todo, error) {
 	timeFormat := fmt.Sprintf("%d-%02d-%02d", t.Year(), t.Month(), t.Day())
 
 	newTodo := models.Todo{
+		Id:       primitive.NewObjectID(),
 		Title:    todo.Title,
-		Status:   false,
+		Status:   "false",
 		Content:  todo.Content,
 		UserName: todo.UserName,
 		CreateAt: timeFormat,
@@ -132,14 +133,14 @@ func findOneTodoItem(objId primitive.ObjectID) *models.Todo {
 	return todo
 }
 
-func TodoStatusChangeService(objId primitive.ObjectID, status models.TodoStatus) (bool, error) {
+func TodoStatusChangeService(objId primitive.ObjectID, status models.TodoCurrentStatus) (string, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
 
 	// var newStatus models.TodoStatus
 	json.Marshal(status.Status)
 
-	updateStatus := bson.M{"status": bool(status.Status)}
+	updateStatus := bson.M{"status": string(status.Status)}
 
 	_, err := todoCollection.UpdateOne(ctx, bson.M{"_id": objId}, bson.M{"$set": updateStatus})
 	if err != nil {
