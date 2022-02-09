@@ -29,6 +29,10 @@ func CreateTodo(c *gin.Context) {
 
 func GetTodoList(c *gin.Context) {
 	username := c.Param("userName")
+	if username == "" {
+		c.JSON(http.StatusUnauthorized, response.TodoResponse{Status: http.StatusUnauthorized, Message: "error", Data: map[string]interface{}{"data": "not found username"}})
+		return
+	}
 
 	todoList, err := services.GetTodoListService(username)
 	if err != nil {
@@ -73,7 +77,7 @@ func EditTodo(c *gin.Context) {
 func TodoStatusChange(c *gin.Context) {
 	todoId := c.Param("objId")
 	objId, _ := primitive.ObjectIDFromHex(todoId)
-	var currentStatus models.TodoStatus
+	var currentStatus models.TodoCurrentStatus
 
 	if err := c.BindJSON(&currentStatus); err != nil {
 		c.JSON(http.StatusBadRequest, response.TodoResponse{Status: http.StatusBadRequest, Message: "error", Data: map[string]interface{}{"data": err.Error()}})
