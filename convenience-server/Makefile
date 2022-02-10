@@ -1,2 +1,2 @@
 build:
-	go build -o cs ./cmd
+	go build -o cs ./cmd/server
