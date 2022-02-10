@@ -22,7 +22,7 @@ func GetDB() *mongo.Database {
 func Initialize(ctx context.Context) (err error) {
 	uri := fmt.Sprintf("mongodb+srv://%s:%s@%s", config.DBUserName, config.DBPassword, config.DBPort)
 	fmt.Printf("Trying to connect %s...", uri)
-	client, err = mongo.Connect(ctx, options.Client().ApplyURI("mongodb+srv://dltmdrbtjd:ss29347718@cluster0.5w9nj.mongodb.net/golangDB?retryWrites=true&w=majority"))
+	client, err = mongo.Connect(ctx, options.Client().ApplyURI(uri))
 	if err != nil {
 		logrus.Errorln(err)
 		return err
