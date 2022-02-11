@@ -10,51 +10,6 @@ package controllers
 // 	"go.mongodb.org/mongo-driver/bson/primitive"
 // )
 
-// func CreateTodo(c *gin.Context) {
-// 	var todo *models.Todo
-
-// 	if err := c.BindJSON(&todo); err != nil {
-// 		c.JSON(http.StatusBadRequest, response.TodoResponse{Status: http.StatusBadRequest, Message: "error", Data: map[string]interface{}{"data": err.Error()}})
-// 		return
-// 	}
-
-// 	newTodo, err := services.CreateTodoService(*todo)
-// 	if err != nil {
-// 		c.JSON(http.StatusInternalServerError, response.TodoResponse{Status: http.StatusInternalServerError, Message: "error", Data: map[string]interface{}{"data": err.Error()}})
-// 		return
-// 	}
-
-// 	c.JSON(http.StatusCreated, response.TodoResponse{Status: http.StatusCreated, Message: "success", Data: map[string]interface{}{"data": newTodo}})
-// }
-
-// func GetTodoList(c *gin.Context) {
-// 	username := c.Param("userName")
-// 	if username == "" {
-// 		c.JSON(http.StatusUnauthorized, response.TodoResponse{Status: http.StatusUnauthorized, Message: "error", Data: map[string]interface{}{"data": "not found username"}})
-// 		return
-// 	}
-
-// 	todoList, err := services.GetTodoListService(username)
-// 	if err != nil {
-// 		c.JSON(http.StatusInternalServerError, response.TodoResponse{Status: http.StatusInternalServerError, Message: "error", Data: map[string]interface{}{"data": err.Error()}})
-// 		return
-// 	}
-// 	c.JSON(http.StatusCreated, response.TodoResponse{Status: http.StatusCreated, Message: "success", Data: map[string]interface{}{"data": todoList}})
-// }
-
-// func DeleteTodo(c *gin.Context) {
-// 	todoId := c.Param("objId")
-// 	objId, _ := primitive.ObjectIDFromHex(todoId)
-
-// 	err := services.DeleteTodoService(objId)
-// 	if err != nil {
-// 		c.JSON(http.StatusInternalServerError, response.TodoResponse{Status: http.StatusInternalServerError, Message: "error", Data: map[string]interface{}{"data": err.Error()}})
-// 		return
-// 	}
-
-// 	c.JSON(http.StatusCreated, response.TodoResponse{Status: http.StatusCreated, Message: "success", Data: map[string]interface{}{"data": "User successfully deleted!"}})
-// }
-
 // func EditTodo(c *gin.Context) {
 // 	todoId := c.Param("objId")
 // 	objId, _ := primitive.ObjectIDFromHex(todoId)
