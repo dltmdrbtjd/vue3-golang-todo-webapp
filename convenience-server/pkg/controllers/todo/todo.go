@@ -18,6 +18,7 @@ type Controller interface {
 	GetTodoList(c *gin.Context)
 	DeleteTodoItem(c *gin.Context)
 	EditTodoItem(c *gin.Context)
+	TodoStatusChange(c *gin.Context)
 }
 
 func NewController(todoService todo.Service) *controller {
@@ -85,6 +86,25 @@ func (ctrl *controller) EditTodoItem(c *gin.Context) {
 	}
 
 	err := ctrl.todoService.EditTodoItem(objId, todoItem.Content, todoItem.Title)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{})
+}
+
+func (ctrl *controller) TodoStatusChange(c *gin.Context) {
+	todoId := c.Param("todoId")
+	objId, _ := primitive.ObjectIDFromHex(todoId)
+
+	var todoItem todoModel.Todo
+	if err := c.BindJSON(&todoItem); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	err := ctrl.todoService.TodoStatusChange(objId, todoItem.Status)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
