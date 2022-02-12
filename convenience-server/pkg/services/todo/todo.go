@@ -57,3 +57,15 @@ func (s *service) EditTodoItem(todoId primitive.ObjectID, content string, title 
 
 	return err
 }
+
+func (s *service) TodoStatusChange(todoId primitive.ObjectID, status string) error {
+	ctx, cancel := context.WithCancel(context.Background())
+	defer cancel()
+
+	err := s.todoRepository.TodoStatusChange(ctx, todoId, status)
+	if err != nil {
+		logrus.Errorln("todo status change error:", err.Error())
+	}
+
+	return err
+}

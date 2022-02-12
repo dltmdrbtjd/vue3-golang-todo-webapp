@@ -11,6 +11,7 @@ type Service interface {
 	GetTodoList(username string) ([]todoModel.Todo, error)
 	DeleteTodoItem(todoId primitive.ObjectID) error
 	EditTodoItem(todoId primitive.ObjectID, content string, title string) error
+	TodoStatusChange(todoId primitive.ObjectID, status string) error
 }
 
 type service struct {
