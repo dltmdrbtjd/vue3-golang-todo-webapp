@@ -4,7 +4,6 @@ import (
 	"net/http"
 
 	todoModel "github.com/Convenience-Tools/convenience-server/pkg/models/todo"
-	"github.com/Convenience-Tools/convenience-server/pkg/response"
 	"github.com/Convenience-Tools/convenience-server/pkg/services/todo"
 	"github.com/gin-gonic/gin"
 	"go.mongodb.org/mongo-driver/bson/primitive"
@@ -34,32 +33,32 @@ func CreateController() *controller {
 func (ctrl *controller) CreateTodoItem(c *gin.Context) {
 	var todoItem *todoModel.Todo
 	if err := c.BindJSON(&todoItem); err != nil {
-		c.JSON(http.StatusBadRequest, response.TodoResponse{Status: http.StatusBadRequest, Message: "error", Data: map[string]interface{}{"data": err.Error()}})
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
 
 	err := ctrl.todoService.CreateTodo(todoItem.Title, todoItem.Content, todoItem.UserName)
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, response.TodoResponse{Status: http.StatusInternalServerError, Message: "error", Data: map[string]interface{}{"data": err.Error()}})
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
-	c.JSON(http.StatusCreated, response.TodoResponse{Status: http.StatusCreated, Message: "success", Data: map[string]interface{}{}})
+	c.JSON(http.StatusCreated, gin.H{})
 }
 
 func (ctrl *controller) GetTodoList(c *gin.Context) {
 	username := c.Param("username")
 	if username == "" {
-		c.JSON(http.StatusUnauthorized, response.TodoResponse{Status: http.StatusUnauthorized, Message: "error", Data: map[string]interface{}{"data": "not found username"}})
+		c.JSON(http.StatusUnauthorized, gin.H{"error": "not found username"})
 		return
 	}
 
 	todoList, err := ctrl.todoService.GetTodoList(username)
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, response.TodoResponse{Status: http.StatusInternalServerError, Message: "error", Data: map[string]interface{}{"data": err.Error()}})
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
 
-	c.JSON(http.StatusCreated, response.TodoResponse{Status: http.StatusCreated, Message: "success", Data: map[string]interface{}{"data": todoList}})
+	c.JSON(http.StatusCreated, gin.H{"data": todoList})
 }
 
 func (ctrl *controller) DeleteTodoItem(c *gin.Context) {
@@ -68,11 +67,11 @@ func (ctrl *controller) DeleteTodoItem(c *gin.Context) {
 
 	err := ctrl.todoService.DeleteTodoItem(objId)
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, response.TodoResponse{Status: http.StatusInternalServerError, Message: "error", Data: map[string]interface{}{"data": err.Error()}})
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
 
-	c.JSON(http.StatusCreated, response.TodoResponse{Status: http.StatusCreated, Message: "success", Data: map[string]interface{}{"data": "User successfully deleted!"}})
+	c.JSON(http.StatusCreated, gin.H{})
 }
 
 func (ctrl *controller) EditTodoItem(c *gin.Context) {
@@ -81,15 +80,15 @@ func (ctrl *controller) EditTodoItem(c *gin.Context) {
 
 	var todoItem todoModel.Todo
 	if err := c.BindJSON(&todoItem); err != nil {
-		c.JSON(http.StatusBadRequest, response.TodoResponse{Status: http.StatusBadRequest, Message: "error", Data: map[string]interface{}{"data": err.Error()}})
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
 
 	err := ctrl.todoService.EditTodoItem(objId, todoItem.Content, todoItem.Title)
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, response.TodoResponse{Status: http.StatusInternalServerError, Message: "error", Data: map[string]interface{}{"data": err.Error()}})
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
 
-	c.JSON(http.StatusOK, response.TodoResponse{Status: http.StatusOK, Message: "success", Data: map[string]interface{}{}})
+	c.JSON(http.StatusOK, gin.H{})
 }
