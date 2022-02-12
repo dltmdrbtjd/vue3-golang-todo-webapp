@@ -2,25 +2,21 @@
   <div class="flex justify-center mt-10 w-full">
     <input
       class="input"
-      type="text"
-      :type="type"
-      :placeholder="placeholder"
-      v-model="value"
+      :type="props.type"
+      :placeholder="props.placeholder"
+      :value="props.modelValue"
+      @input="handleInputChange($event)"
     />
   </div>
 </template>
 <script setup lang="ts">
-import { useVModel } from "@vueuse/core";
-
 const props = withDefaults(
   defineProps<{
-    label?: string;
     type?: string;
     modelValue?: string | number;
     placeholder?: string;
   }>(),
   {
-    label: "",
     type: "text",
     modelValue: "",
     placeholder: "",
@@ -28,9 +24,10 @@ const props = withDefaults(
 );
 
 const emit = defineEmits(["update:modelValue"]);
-const value = useVModel(props, "modelValue", emit);
 
-console.log(props.modelValue);
+const handleInputChange = (event: Event) => {
+  emit('update:modelValue', (event.target as HTMLInputElement).value)
+}
 </script>
 <style scoped lang="scss">
 .input {
