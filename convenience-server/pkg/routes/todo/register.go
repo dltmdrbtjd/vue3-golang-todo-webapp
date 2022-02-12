@@ -15,5 +15,7 @@ func Register(parentGroup *gin.RouterGroup, controller todo.Controller) {
 		todoGroup.POST("", controller.CreateTodoItem)
 		todoGroup.GET("/:username", controller.GetTodoList)
 		todoGroup.DELETE("/:todoId", controller.DeleteTodoItem)
+		todoGroup.PUT("/:todoId", controller.EditTodoItem)
+		todoGroup.PUT("/status/:todoId", controller.TodoStatusChange)
 	}
 }
