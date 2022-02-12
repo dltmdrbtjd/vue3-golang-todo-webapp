@@ -84,7 +84,7 @@ func (r *repostitory) EditTodoItem(ctx context.Context, todoId primitive.ObjectI
 	}
 
 	updateTodoItem := bson.M{"content": content, "title": title}
-	_, err := r.todoCollection.UpdateOne(ctx, bson.M{"_id": todoId}, updateTodoItem)
+	_, err := r.todoCollection.UpdateOne(ctx, bson.M{"_id": todoId}, bson.M{"$set": updateTodoItem})
 	if err != nil {
 		logrus.Errorln("todo item failed update:", err.Error())
 		return err
@@ -101,4 +101,15 @@ func (r *repostitory) findOneTodoItem(ctx context.Context, todoId primitive.Obje
 	}
 
 	return todoItem
+}
+
+func (r *repostitory) TodoStatusChange(ctx context.Context, todoId primitive.ObjectID, status string) error {
+	updateTodoStatus := bson.M{"status": status}
+	_, err := r.todoCollection.UpdateOne(ctx, bson.M{"_id": todoId}, bson.M{"$set": updateTodoStatus})
+	if err != nil {
+		logrus.Errorln("todo status failed change: ", err.Error())
+		return err
+	}
+
+	return err
 }
