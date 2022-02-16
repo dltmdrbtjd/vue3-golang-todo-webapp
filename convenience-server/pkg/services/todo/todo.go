@@ -8,17 +8,17 @@ import (
 	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
-func (s *service) CreateTodo(title string, content string, username string) error {
+func (s *service) CreateTodo(title string, content string, username string) (*todo.Todo, error) {
 	ctx, cancel := context.WithCancel(context.Background())
 	defer cancel()
 
-	err := s.todoRepository.CreateTodo(ctx, title, content, username)
+	todoItem, err := s.todoRepository.CreateTodo(ctx, title, content, username)
 	if err != nil {
 		logrus.Errorln("create todo error: ", err.Error())
-		return err
+		return nil, err
 	}
 
-	return nil
+	return todoItem, nil
 }
 
 func (s *service) GetTodoList(username string) ([]todo.Todo, error) {

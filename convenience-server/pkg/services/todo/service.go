@@ -7,7 +7,7 @@ import (
 )
 
 type Service interface {
-	CreateTodo(title string, content string, username string) error
+	CreateTodo(title string, content string, username string) (*todoModel.Todo, error)
 	GetTodoList(username string) ([]todoModel.Todo, error)
 	DeleteTodoItem(todoId primitive.ObjectID) error
 	EditTodoItem(todoId primitive.ObjectID, content string, title string) error

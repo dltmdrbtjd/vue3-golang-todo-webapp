@@ -38,12 +38,12 @@ func (ctrl *controller) CreateTodoItem(c *gin.Context) {
 		return
 	}
 
-	err := ctrl.todoService.CreateTodo(todoItem.Title, todoItem.Content, todoItem.UserName)
+	todoItem, err := ctrl.todoService.CreateTodo(todoItem.Title, todoItem.Content, todoItem.UserName)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
-	c.JSON(http.StatusCreated, gin.H{})
+	c.JSON(http.StatusCreated, gin.H{"data": todoItem})
 }
 
 func (ctrl *controller) GetTodoList(c *gin.Context) {

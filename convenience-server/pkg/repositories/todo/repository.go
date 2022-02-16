@@ -14,7 +14,7 @@ const (
 )
 
 type Repository interface {
-	CreateTodo(ctx context.Context, title string, content string, username string) error
+	CreateTodo(ctx context.Context, title string, content string, username string) (*todo.Todo, error)
 	GetTodoList(ctx context.Context, username string) ([]todo.Todo, error)
 	DeleteTodoItem(ctx context.Context, todoId primitive.ObjectID) error
 	EditTodoItem(ctx context.Context, todoId primitive.ObjectID, content string, title string) error

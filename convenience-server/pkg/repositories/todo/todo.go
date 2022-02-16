@@ -12,24 +12,30 @@ import (
 	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
-func (r *repostitory) CreateTodo(ctx context.Context, title string, content string, username string) error {
+func (r *repostitory) CreateTodo(ctx context.Context, title string, content string, username string) (*todo.Todo, error) {
 
 	t := time.Now()
 
-	res, err := r.todoCollection.InsertOne(ctx,
-		bson.M{
-			"title":     title,
-			"status":    "ready",
-			"content":   content,
-			"username":  username,
-			"create_at": t,
-		})
+	newTodo := bson.M{
+		"title":     title,
+		"status":    "ready",
+		"content":   content,
+		"username":  username,
+		"create_at": t,
+	}
+
+	res, err := r.todoCollection.InsertOne(ctx, newTodo)
 
 	if err != nil {
-		return err
+		return nil, err
 	}
-	logrus.Info("new todo item create. id:", res.InsertedID)
-	return nil
+	logrus.Info("new todo item create. id:", res.InsertedID.(primitive.ObjectID))
+
+	if oid, ok := res.InsertedID.(primitive.ObjectID); ok {
+		todoItem := r.findOneTodoItem(ctx, oid)
+		return &todoItem, err
+	}
+	return nil, err
 }
 
 func (r *repostitory) GetTodoList(ctx context.Context, username string) ([]todo.Todo, error) {
