@@ -1,14 +1,8 @@
 export interface Todo {
-  id?: string;
+  _id?: string;
   title: string;
-  status?: boolean;
+  status?: string;
   content: string;
   username: string;
   createAt?: Date;
 }
-
-// Title:    todo.Title,
-// Status:   false,
-// Content:  todo.Content,
-// UserName: todo.UserName,
-// CreateAt: timeFormat,
