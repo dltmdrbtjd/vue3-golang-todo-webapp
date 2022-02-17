@@ -44,6 +44,7 @@
             class="h-8 w-8"
             fill="none"
             viewBox="0 0 24 24"
+            @click="todoStatusChange(String(todo._id), idx)"
             :stroke="todo.status === 'success' ? 'green' : 'gray'"
           >
             <path
@@ -83,8 +84,12 @@ function onTodoEdit(todoId: string, content: string) {
   text.value = content;
 }
 
-async function editTodo(todo: Todo, index: number) {
-  await todoStore.editTodo(String(todo._id), text.value, index);
+function editTodo(todo: Todo, index: number) {
+  todoStore.editTodo(String(todo._id), text.value, index);
+}
+
+function todoStatusChange(todoId: string, index: number) {
+  todoStore.checkTodoStatus(todoId, index);
 }
 </script>
 <style scoped lang="scss">

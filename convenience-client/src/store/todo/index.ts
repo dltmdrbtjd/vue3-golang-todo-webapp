@@ -48,6 +48,17 @@ export const useTodoStore = defineStore("todo", {
         console.error(error);
       }
     },
+    async checkTodoStatus(todoId: string, index: number) {
+      try {
+        this.todoList[index].status =
+          this.todoList[index].status === "ready" ? "success" : "ready";
+        await $http.put(`/todo/status/${todoId}`, {
+          status: this.todoList[index].status,
+        });
+      } catch (error) {
+        console.error(error);
+      }
+    },
   },
   getters: {
     getTodoList: (state): Todo[] => [...state.todoList],
