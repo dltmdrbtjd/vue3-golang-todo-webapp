@@ -5,4 +5,5 @@ export interface Todo {
   content: string;
   username: string;
   createAt?: Date;
+  isEdit?: boolean;
 }
