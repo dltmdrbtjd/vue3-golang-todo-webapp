@@ -21,12 +21,12 @@ type Repository interface {
 	TodoStatusChange(ctx context.Context, todoId primitive.ObjectID, status string) error
 }
 
-type repostitory struct {
+type repository struct {
 	todoCollection *mongo.Collection
 }
 
 func NewRepository(todoCollection *mongo.Collection) Repository {
-	return &repostitory{
+	return &repository{
 		todoCollection: todoCollection,
 	}
 }

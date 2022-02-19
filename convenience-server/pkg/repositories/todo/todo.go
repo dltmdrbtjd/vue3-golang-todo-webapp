@@ -12,7 +12,7 @@ import (
 	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
-func (r *repostitory) CreateTodo(ctx context.Context, title string, content string, username string) (*todo.Todo, error) {
+func (r *repository) CreateTodo(ctx context.Context, title string, content string, username string) (*todo.Todo, error) {
 
 	t := time.Now()
 
@@ -38,7 +38,7 @@ func (r *repostitory) CreateTodo(ctx context.Context, title string, content stri
 	return nil, err
 }
 
-func (r *repostitory) GetTodoList(ctx context.Context, username string) ([]todo.Todo, error) {
+func (r *repository) GetTodoList(ctx context.Context, username string) ([]todo.Todo, error) {
 	findOptions := options.FindOptions{}
 
 	cur, err := r.todoCollection.Find(ctx,
@@ -60,7 +60,7 @@ func (r *repostitory) GetTodoList(ctx context.Context, username string) ([]todo.
 	return todoList, nil
 }
 
-func (r *repostitory) DeleteTodoItem(ctx context.Context, todoId primitive.ObjectID) error {
+func (r *repository) DeleteTodoItem(ctx context.Context, todoId primitive.ObjectID) error {
 	res, err := r.todoCollection.DeleteOne(ctx,
 		bson.M{
 			"_id": todoId,
@@ -78,7 +78,7 @@ func (r *repostitory) DeleteTodoItem(ctx context.Context, todoId primitive.Objec
 	return err
 }
 
-func (r *repostitory) EditTodoItem(ctx context.Context, todoId primitive.ObjectID, content string, title string) error {
+func (r *repository) EditTodoItem(ctx context.Context, todoId primitive.ObjectID, content string, title string) error {
 	todoItem := r.findOneTodoItem(ctx, todoId)
 
 	if content == "" {
@@ -99,7 +99,7 @@ func (r *repostitory) EditTodoItem(ctx context.Context, todoId primitive.ObjectI
 	return err
 }
 
-func (r *repostitory) findOneTodoItem(ctx context.Context, todoId primitive.ObjectID) todo.Todo {
+func (r *repository) findOneTodoItem(ctx context.Context, todoId primitive.ObjectID) todo.Todo {
 	var todoItem todo.Todo
 	err := r.todoCollection.FindOne(ctx, bson.M{"_id": todoId}).Decode(&todoItem)
 	if err != nil {
@@ -109,7 +109,7 @@ func (r *repostitory) findOneTodoItem(ctx context.Context, todoId primitive.Obje
 	return todoItem
 }
 
-func (r *repostitory) TodoStatusChange(ctx context.Context, todoId primitive.ObjectID, status string) error {
+func (r *repository) TodoStatusChange(ctx context.Context, todoId primitive.ObjectID, status string) error {
 	updateTodoStatus := bson.M{"status": status}
 	_, err := r.todoCollection.UpdateOne(ctx, bson.M{"_id": todoId}, bson.M{"$set": updateTodoStatus})
 	if err != nil {
