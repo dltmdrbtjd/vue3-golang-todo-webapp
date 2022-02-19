@@ -3,5 +3,5 @@ export default (envName: string): any => {
         return ""
     }
 
-    return import.meta.env.VITE_APP_BASE_URL;
+    return import.meta.env[envName];
 }

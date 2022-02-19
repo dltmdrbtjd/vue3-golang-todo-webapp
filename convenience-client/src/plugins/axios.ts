@@ -2,7 +2,7 @@ import axios from "axios";
 import { App } from "vue";
 import getEnv from "@/scripts/env";
 
-axios.defaults.baseURL = getEnv("VITE_BASE_URL");
+axios.defaults.baseURL = getEnv("VITE_APP_BASE_URL");
 
 export default {
     install: (app: App) => {
