@@ -65,7 +65,7 @@
 <script setup lang="ts">
 import { useTodoStore } from "@/store/todo";
 import TodoInput from "./TodoInput.vue";
-import { Todo } from "@/store/todo/type";
+import { Todo } from "@/models/todo.model";
 import { computed, reactive, ref } from "vue";
 
 const todoStore = useTodoStore();

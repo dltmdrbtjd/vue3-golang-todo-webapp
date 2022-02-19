@@ -1,6 +1,6 @@
 import { defineStore } from "pinia";
-import { Todo } from "./type";
-import $http, { AxiosError } from "axios";
+import { Todo } from "@/models/todo.model";
+import $http from "axios";
 
 interface State {
   todoList: Todo[];
