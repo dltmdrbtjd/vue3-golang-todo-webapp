@@ -14,7 +14,7 @@ import TodoCard from "@/components/todo/TodoCard.vue";
 
 import { useTodoStore } from "@/store/todo";
 import { ref, onMounted, computed } from "vue";
-import { Todo } from "@/store/todo/type";
+import { Todo } from "@/models/todo.model";
 
 const todoStore = useTodoStore();
 const todoList = computed<Todo[]>(() => todoStore.getTodoList);
