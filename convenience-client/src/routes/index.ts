@@ -6,6 +6,11 @@ const routes = [
     name: "Todo",
     component: () => import("@/pages/Todo.vue"),
   },
+  {
+    path: "/google-login/callback",
+    name: "GoogleAuth",
+    component: () => import("@/pages/GoogleAuth.vue"),
+  }
 ];
 
 const router = createRouter({
