@@ -14,5 +14,7 @@ func Register(parentGroup *gin.RouterGroup, controller googleOAuth.Controller) {
 	{
 		googleOAuthGroup.GET("/google-login", controller.GoogleLogin)
 		googleOAuthGroup.GET("/google-login/callback", controller.GoogleLoginCallback)
+		googleOAuthGroup.GET("/google-userinfo/:useremail", controller.GetGoogleUserInfo)
+		googleOAuthGroup.GET("/google-token-verification/:useremail", controller.GoogleTokenVerification)
 	}
 }
