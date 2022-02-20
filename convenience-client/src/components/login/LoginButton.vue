@@ -13,6 +13,5 @@ let url = "";
 onMounted(async () => {
     const resp = await $http.get("/google-login")
     url = resp.data.data
-    console.log(url)
 })
 </script>
