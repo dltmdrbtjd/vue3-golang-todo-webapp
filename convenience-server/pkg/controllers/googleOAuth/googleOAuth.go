@@ -8,36 +8,39 @@ import (
 	"net/http"
 
 	"github.com/Convenience-Tools/convenience-server/pkg/models/user"
-	"github.com/Convenience-Tools/convenience-server/pkg/services/oauth"
+	"github.com/Convenience-Tools/convenience-server/pkg/services/googleOAuth"
 	"github.com/gin-gonic/gin"
+	"github.com/sirupsen/logrus"
 )
 
 type controller struct {
-	oauthService oauth.Service
+	googleOAuthService googleOAuth.Service
 }
 
 type Controller interface {
 	GoogleLogin(c *gin.Context)
 	GoogleLoginCallback(c *gin.Context)
+	GetGoogleUserInfo(c *gin.Context)
+	GoogleTokenVerification(c *gin.Context)
 }
 
-func NewController(oauthService oauth.Service) *controller {
+func NewController(googleOAuthService googleOAuth.Service) *controller {
 	return &controller{
-		oauthService: oauthService,
+		googleOAuthService: googleOAuthService,
 	}
 }
 
 func CreateController() *controller {
-	return NewController(oauth.CreateService())
+	return NewController(googleOAuth.CreateService())
 }
 
 func (ctrl *controller) GoogleLogin(c *gin.Context) {
-	url := ctrl.oauthService.GoogleLogin()
+	url := ctrl.googleOAuthService.GoogleLogin()
 	c.JSON(http.StatusOK, map[string]string{"data": url})
 }
 
 func (ctrl *controller) GoogleLoginCallback(c *gin.Context) {
-	token, err := ctrl.oauthService.GoogleLoginCallback(c.Request.FormValue("code"))
+	token, err := ctrl.googleOAuthService.GoogleLoginCallback(c.Request.FormValue("code"))
 	if err != nil {
 		fmt.Println("could not get token \n", err.Error())
 		return
@@ -46,6 +49,7 @@ func (ctrl *controller) GoogleLoginCallback(c *gin.Context) {
 	resp, err := http.Get("https://www.googleapis.com/oauth2/v2/userinfo?access_token=" + token.AccessToken)
 	if err != nil {
 		fmt.Println("could not create reuqest \n", err.Error())
+		c.JSON(http.StatusNonAuthoritativeInfo, map[string]string{"error": "unexcepted access token!"})
 		return
 	}
 	defer resp.Body.Close()
@@ -56,11 +60,55 @@ func (ctrl *controller) GoogleLoginCallback(c *gin.Context) {
 		return
 	}
 
-	var userinfo user.UserInfo
+	var userinfo user.GoogleUserInfo
+	userinfo.Token = token
 	err = json.Unmarshal(content, &userinfo)
 	if err != nil {
 		log.Println(err)
 	}
 
-	c.JSON(http.StatusOK, map[string]interface{}{"email": userinfo.Email})
+	err = ctrl.googleOAuthService.SaveGoogleUserInfo(&userinfo)
+	if err != nil {
+		logrus.Errorln(err.Error())
+	}
+
+	c.JSON(http.StatusOK, map[string]interface{}{"data": userinfo.Email})
+}
+
+func (ctrl *controller) GoogleTokenVerification(c *gin.Context) {
+	userEmail := c.Param("useremail")
+	if userEmail == "" {
+		logrus.Errorln("not found user email controller")
+		c.JSON(http.StatusNotFound, map[string]string{"error": "not found user email"})
+	}
+
+	token, err := ctrl.googleOAuthService.GoogleTokenVerification(userEmail)
+	if err != nil {
+		logrus.Errorln(err.Error())
+	}
+
+	_, err = http.Get("https://www.googleapis.com/oauth2/v2/userinfo?access_token=" + token.AccessToken)
+	if err != nil {
+		fmt.Println("could not create reuqest \n", err.Error())
+		c.JSON(http.StatusNonAuthoritativeInfo, map[string]string{"error": "unexcepted access token!"})
+		return
+	}
+
+	c.JSON(http.StatusOK, map[string]bool{"verification": true})
+}
+
+func (ctrl *controller) GetGoogleUserInfo(c *gin.Context) {
+	userEmail := c.Param("useremail")
+	if userEmail == "" {
+		logrus.Errorln("not found user email controller")
+		c.JSON(http.StatusNotFound, map[string]string{"error": "not found user email"})
+	}
+
+	userInfo, err := ctrl.googleOAuthService.GetGoogleUserInfo(userEmail)
+	if err != nil {
+		logrus.Errorln("not found user info controller", err.Error())
+		c.JSON(http.StatusNotFound, map[string]string{"error": "user info not found"})
+	}
+
+	c.JSON(http.StatusOK, map[string]interface{}{"data": userInfo})
 }
