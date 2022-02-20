@@ -3,6 +3,11 @@ import { createWebHistory, createRouter } from "vue-router";
 const routes = [
   {
     path: "/",
+    name: "Blog",
+    component: () => import("@/pages/Blog.vue"),
+  },
+  {
+    path: "/todo",
     name: "Todo",
     component: () => import("@/pages/Todo.vue"),
   },
@@ -10,6 +15,11 @@ const routes = [
     path: "/google-login/callback",
     name: "GoogleAuth",
     component: () => import("@/pages/GoogleAuth.vue"),
+  },
+  {
+    path: "/login",
+    name: "Login",
+    component: () => import("@/pages/Login.vue"),
   }
 ];
 
