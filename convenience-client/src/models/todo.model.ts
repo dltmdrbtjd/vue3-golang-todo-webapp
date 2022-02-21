@@ -8,3 +8,7 @@ export interface Todo {
     isEdit?: boolean;
   }
   
+  // TODO
+  // 1. Change username to Email ?
+  // 2. Change username to google user name ?
+  
