@@ -22,7 +22,6 @@ export const useUserStore = defineStore("user", {
             try {
                 const resp = await $http.get(`/google-userinfo/${userEmail}`)
                 this.userInfo = resp.data.data
-                console.log(resp)
             } catch(error) {
                 console.error(error)
             }
