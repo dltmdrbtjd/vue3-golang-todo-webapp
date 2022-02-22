@@ -11,7 +11,7 @@ import $http from "axios";
 import AppBar from "@/components/common/AppBar.vue";
 import { getLocalStorage } from "./scripts/localStorage";
 import { useUserStore } from "./store/user";
-import {computed, onMounted, reactive} from "vue";
+import { onMounted, reactive} from "vue";
 import router from "./routes";
 import { useRoute } from "vue-router";
 
@@ -26,6 +26,7 @@ async function userTokenVerification(useremail: string) {
   }
 }
 function getUserInfoDetail() {
+  console.log("getUserInfo actions First function")
   userStore.getUserInfo()
 }
 
@@ -39,11 +40,10 @@ const reactiveRef = reactive({ useremail })
 onMounted(() => {
   if (reactiveRef.useremail) {
     userTokenVerification(String(reactiveRef.useremail))
-    getUserInfoDetail()
+    userStore.getUserInfo()
   } else if(loginPathCheck && callbackPathCheck2){
     router.push("/login")
     userStore.googleTokenVerification(false)
   }
 })
 </script>
-<style></style>

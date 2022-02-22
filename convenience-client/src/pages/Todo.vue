@@ -13,16 +13,19 @@ import TodoInput from "@/components/todo/TodoInput.vue";
 import TodoCard from "@/components/todo/TodoCard.vue";
 
 import { useTodoStore } from "@/store/todo";
-import { ref, onMounted, computed } from "vue";
-import { Todo } from "@/models/todo.model";
+import { ref, onMounted, computed, reactive } from "vue";
+import { useUserStore } from "@/store/user";
+import { User } from "@/models/user.model";
 
 const todoStore = useTodoStore();
-const todoList = computed<Todo[]>(() => todoStore.getTodoList);
+const userStore = useUserStore();
+const userInfo = computed<User>(() => userStore.getUserDetail)
+const computedRef = reactive({ userInfo })
 
 let text = ref<string>("");
 async function CreateTodo() {
   const newTodo = {
-    username: todoList.value[0].username,
+    username: computedRef.userInfo.name,
     content: text?.value,
     title: "",
   };
@@ -31,6 +34,6 @@ async function CreateTodo() {
 }
 
 onMounted(() => {
-  todoStore.getTodo("dltmdrbtjd1");
+  todoStore.getTodo(computedRef.userInfo.name);
 });
 </script>
