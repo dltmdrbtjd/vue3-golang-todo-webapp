@@ -1,5 +1,5 @@
 <template>
-  <div v-for="(todo, idx) in computedRef.todoList">
+  <div v-for="(todo, idx) in computedRef.todoList" :key="todo._id">
     <div
       class="mt-10 card border w-2/3 mx-auto bg-gray-800 text-white flex items-center justify-between"
       v-if="!todo.isEdit"
@@ -91,6 +91,7 @@ function editTodo(todo: Todo, index: number) {
 function todoStatusChange(todoId: string, index: number) {
   todoStore.checkTodoStatus(todoId, index);
 }
+
 </script>
 <style scoped lang="scss">
 svg {
