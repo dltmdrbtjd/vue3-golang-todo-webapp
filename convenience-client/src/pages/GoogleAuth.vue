@@ -14,14 +14,11 @@ const route = useRoute();
 let authQuery = route.fullPath.split("?")[1];
 
 const userStore = useUserStore();
-function getUserInfoDetail() {
-  userStore.getUserInfo()
-}
 
 onMounted(async () => {
     const resp = await $http.get(`/google-login/callback?${authQuery}`)
     setLocalStorage("convenience-tools-email", resp.data.data)
-    getUserInfoDetail()
+    userStore.getUserInfo()
     userStore.googleTokenVerification(true)
     router.push("/")
 })
