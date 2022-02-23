@@ -3,8 +3,8 @@
     <div class="mx-auto max-w-3xl w-full flex justify-between">
       <ul class="flex items-center">
         <li>BLOG</li>
-        <li v-if="computedRef.authentication">TODO</li>
-        <li v-if="computedRef.authentication">ACCOUNT-BOOK</li>
+        <li v-if="authentication">TODO</li>
+        <li v-if="authentication">ACCOUNT-BOOK</li>
       </ul>
       <div class="flex items-center">
         <p class="mr-4 text-white">{{ userInfo.name }}</p>
@@ -24,13 +24,11 @@
 <script setup lang="ts">
 import { User } from '@/models/user.model';
 import { useUserStore } from '@/store/user';
-import { computed, reactive } from 'vue';
+import { computed } from 'vue';
 
 const userStore = useUserStore();
 const authentication = computed<boolean>(() => userStore.getTokenVerification)
 const userInfo = computed<User>(() => userStore.getUserDetail)
-
-const computedRef = reactive({ authentication, userInfo });
 </script>
 <style scoped lang="scss">
 header {
