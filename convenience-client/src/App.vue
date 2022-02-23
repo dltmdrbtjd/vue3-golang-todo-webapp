@@ -11,7 +11,7 @@ import $http from "axios";
 import AppBar from "@/components/common/AppBar.vue";
 import { getLocalStorage } from "./scripts/localStorage";
 import { useUserStore } from "./store/user";
-import { onMounted, reactive} from "vue";
+import { onMounted, reactive } from "vue";
 import router from "./routes";
 import { useRoute } from "vue-router";
 
@@ -25,23 +25,19 @@ async function userTokenVerification(useremail: string) {
     console.error(error)
   }
 }
-function getUserInfoDetail() {
-  console.log("getUserInfo actions First function")
-  userStore.getUserInfo()
-}
 
 const path = useRoute().path
 const loginPathCheck = path === "/google-login/callback" ? true : false;
-const callbackPathCheck2 = path === "/login"  ? true : false;
+const callbackPathCheck = path === "/login"  ? true : false;
 
 const useremail = getLocalStorage("convenience-tools-email");
 const reactiveRef = reactive({ useremail })
 
 onMounted(() => {
   if (reactiveRef.useremail) {
-    userTokenVerification(String(reactiveRef.useremail))
-    userStore.getUserInfo()
-  } else if(loginPathCheck && callbackPathCheck2){
+    userTokenVerification(String(reactiveRef.useremail));
+    userStore.getUserInfo();
+  } else if(loginPathCheck && callbackPathCheck){
     router.push("/login")
     userStore.googleTokenVerification(false)
   }
