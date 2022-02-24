@@ -6,7 +6,6 @@ import (
 	"github.com/Convenience-Tools/convenience-server/pkg/db"
 	"github.com/Convenience-Tools/convenience-server/pkg/models/user"
 	"go.mongodb.org/mongo-driver/mongo"
-	"golang.org/x/oauth2"
 )
 
 const (
@@ -16,7 +15,6 @@ const (
 type Repository interface {
 	SaveGoogleUserInfo(ctx context.Context, userInfo *user.GoogleUserInfo) error
 	GetGoogleUserInfo(ctx context.Context, userEmail string) (user.UserInfo, error)
-	GoogleTokenVerification(ctx context.Context, userEmail string) (*oauth2.Token, error)
 }
 
 type repository struct {
