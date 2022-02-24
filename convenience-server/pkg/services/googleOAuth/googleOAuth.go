@@ -72,15 +72,3 @@ func (s *service) GetGoogleUserInfo(userEmail string) (*user.UserInfo, error) {
 
 	return &userInfo, err
 }
-
-func (s *service) GoogleTokenVerification(userEmail string) (*oauth2.Token, error) {
-	ctx, cancel := context.WithCancel(context.Background())
-	defer cancel()
-	token, err := s.userRepository.GoogleTokenVerification(ctx, userEmail)
-	if err != nil {
-		logrus.Errorln("not found user token service:", err.Error())
-		return nil, err
-	}
-
-	return token, err
-}

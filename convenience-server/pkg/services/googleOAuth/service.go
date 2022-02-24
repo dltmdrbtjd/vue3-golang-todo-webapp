@@ -11,7 +11,6 @@ type Service interface {
 	GoogleLoginCallback(code string) (*oauth2.Token, error)
 	SaveGoogleUserInfo(userInfo *user.GoogleUserInfo) error
 	GetGoogleUserInfo(userEmail string) (*user.UserInfo, error)
-	GoogleTokenVerification(userEmail string) (*oauth2.Token, error)
 }
 
 type service struct {
