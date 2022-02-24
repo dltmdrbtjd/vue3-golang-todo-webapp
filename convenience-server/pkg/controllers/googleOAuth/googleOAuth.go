@@ -72,22 +72,17 @@ func (ctrl *controller) GoogleLoginCallback(c *gin.Context) {
 		logrus.Errorln(err.Error())
 	}
 
-	c.JSON(http.StatusOK, map[string]interface{}{"data": userinfo.Email})
+	c.JSON(http.StatusOK, map[string]interface{}{"data": token.AccessToken})
 }
 
 func (ctrl *controller) GoogleTokenVerification(c *gin.Context) {
-	userEmail := c.Param("useremail")
-	if userEmail == "" {
-		logrus.Errorln("not found user email controller")
+	token := c.Param("token")
+	if token == "" {
+		logrus.Errorln("not found user token controller")
 		c.JSON(http.StatusNotFound, map[string]string{"error": "not found user email"})
 	}
 
-	token, err := ctrl.googleOAuthService.GoogleTokenVerification(userEmail)
-	if err != nil {
-		logrus.Errorln(err.Error())
-	}
-
-	_, err = http.Get("https://www.googleapis.com/oauth2/v2/userinfo?access_token=" + token.AccessToken)
+	_, err := http.Get("https://www.googleapis.com/oauth2/v2/userinfo?access_token=" + token)
 	if err != nil {
 		fmt.Println("could not create reuqest \n", err.Error())
 		c.JSON(http.StatusNonAuthoritativeInfo, map[string]string{"error": "unexcepted access token!"})
