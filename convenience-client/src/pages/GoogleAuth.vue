@@ -16,8 +16,9 @@ let authQuery = route.fullPath.split('?')[1];
 const userStore = useUserStore();
 
 onMounted(async () => {
-  const resp = await $http.get(`/ google-login/callback?${authQuery}`);
-  setLocalStorage('google-access-token', resp.data.data);
+  const resp = await $http.get(`/google-login/callback?${authQuery}`);
+  const token = resp.data.data;
+  setLocalStorage('google-access-token', token);
   userStore.getUserInfo();
   userStore.googleTokenVerification(true);
   router.push('/');
