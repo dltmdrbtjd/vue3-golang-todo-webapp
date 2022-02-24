@@ -10,7 +10,7 @@ type Service interface {
 	GoogleLogin() string
 	GoogleLoginCallback(code string) (*oauth2.Token, error)
 	SaveGoogleUserInfo(userInfo *user.GoogleUserInfo) error
-	GetGoogleUserInfo(userEmail string) (*user.UserInfo, error)
+	GetGoogleUserInfo(token string) (*user.GoogleUserInfo, error)
 }
 
 type service struct {

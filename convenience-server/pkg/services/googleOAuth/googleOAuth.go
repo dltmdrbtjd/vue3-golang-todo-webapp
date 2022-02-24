@@ -61,10 +61,10 @@ func (s *service) SaveGoogleUserInfo(userInfo *user.GoogleUserInfo) error {
 	return err
 }
 
-func (s *service) GetGoogleUserInfo(userEmail string) (*user.UserInfo, error) {
+func (s *service) GetGoogleUserInfo(token string) (*user.GoogleUserInfo, error) {
 	ctx, cancel := context.WithCancel(context.Background())
 	defer cancel()
-	userInfo, err := s.userRepository.GetGoogleUserInfo(ctx, userEmail)
+	userInfo, err := s.userRepository.GetGoogleUserInfo(ctx, token)
 	if err != nil {
 		logrus.Errorln("not found user info service:", err.Error())
 		return nil, err

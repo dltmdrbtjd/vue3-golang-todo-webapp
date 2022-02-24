@@ -14,7 +14,7 @@ const (
 
 type Repository interface {
 	SaveGoogleUserInfo(ctx context.Context, userInfo *user.GoogleUserInfo) error
-	GetGoogleUserInfo(ctx context.Context, userEmail string) (user.UserInfo, error)
+	GetGoogleUserInfo(ctx context.Context, token string) (user.GoogleUserInfo, error)
 }
 
 type repository struct {

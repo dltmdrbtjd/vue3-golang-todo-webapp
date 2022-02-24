@@ -61,7 +61,7 @@ func (ctrl *controller) GoogleLoginCallback(c *gin.Context) {
 	}
 
 	var userinfo user.GoogleUserInfo
-	userinfo.Token = token
+	userinfo.AccessToken = token.AccessToken
 	err = json.Unmarshal(content, &userinfo)
 	if err != nil {
 		log.Println(err)
@@ -80,6 +80,7 @@ func (ctrl *controller) GoogleTokenVerification(c *gin.Context) {
 	if token == "" {
 		logrus.Errorln("not found user token controller")
 		c.JSON(http.StatusNotFound, map[string]string{"error": "not found user email"})
+		return
 	}
 
 	_, err := http.Get("https://www.googleapis.com/oauth2/v2/userinfo?access_token=" + token)
@@ -93,16 +94,18 @@ func (ctrl *controller) GoogleTokenVerification(c *gin.Context) {
 }
 
 func (ctrl *controller) GetGoogleUserInfo(c *gin.Context) {
-	userEmail := c.Param("useremail")
-	if userEmail == "" {
-		logrus.Errorln("not found user email controller")
-		c.JSON(http.StatusNotFound, map[string]string{"error": "not found user email"})
+	token := c.Param("token")
+	if token == "" {
+		logrus.Errorln("not found user token controller")
+		c.JSON(http.StatusNotFound, map[string]string{"error": "not found user token"})
+		return
 	}
 
-	userInfo, err := ctrl.googleOAuthService.GetGoogleUserInfo(userEmail)
+	userInfo, err := ctrl.googleOAuthService.GetGoogleUserInfo(token)
 	if err != nil {
 		logrus.Errorln("not found user info controller", err.Error())
 		c.JSON(http.StatusNotFound, map[string]string{"error": "user info not found"})
+		return
 	}
 
 	c.JSON(http.StatusOK, map[string]interface{}{"data": userInfo})

@@ -18,9 +18,9 @@ func (r *repository) SaveGoogleUserInfo(ctx context.Context, userInfo *user.Goog
 	return err
 }
 
-func (r *repository) GetGoogleUserInfo(ctx context.Context, userEmail string) (user.UserInfo, error) {
-	var userInfo user.UserInfo
-	err := r.userCollection.FindOne(ctx, bson.M{"email": userEmail}).Decode(&userInfo)
+func (r *repository) GetGoogleUserInfo(ctx context.Context, token string) (user.GoogleUserInfo, error) {
+	var userInfo user.GoogleUserInfo
+	err := r.userCollection.FindOne(ctx, bson.M{"accesstoken": token}).Decode(&userInfo)
 	if err != nil {
 		logrus.Errorln("not found user info:", err.Error())
 	}
