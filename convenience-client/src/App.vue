@@ -17,10 +17,10 @@ import { useRoute } from "vue-router";
 
 const userStore = useUserStore();
 
-async function userTokenVerification(useremail: string) {
+async function userTokenVerification(googleAccessToken: string) {
   try {
-      await $http.get(`/google-token-verification/${useremail}`)
-      userStore.googleTokenVerification(true)
+      const resp = await $http.get(`/google-token-verification/${googleAccessToken}`)
+      userStore.googleTokenVerification(resp.data.verification)
     } catch(error) {
     console.error(error)
   }
@@ -30,12 +30,12 @@ const path = useRoute().path
 const loginPathCheck = path === "/google-login/callback" ? true : false;
 const callbackPathCheck = path === "/login"  ? true : false;
 
-const useremail = getLocalStorage("convenience-tools-email");
-const reactiveRef = reactive({ useremail })
+const token = getLocalStorage("google-access-token");
+const reactiveRef = reactive({ token })
 
 onMounted(() => {
-  if (reactiveRef.useremail) {
-    userTokenVerification(String(reactiveRef.useremail));
+  if (reactiveRef.token) {
+    userTokenVerification(String(reactiveRef.token));
     userStore.getUserInfo();
   } else if(loginPathCheck && callbackPathCheck){
     router.push("/login")

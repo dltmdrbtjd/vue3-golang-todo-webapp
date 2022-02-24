@@ -18,9 +18,9 @@ export const useUserStore = defineStore("user", {
     }),
     actions: {
         async getUserInfo() {
-            const userEmail = getLocalStorage("convenience-tools-email");
+            const googleAccessToken = getLocalStorage("google-access-token");
             try {
-                const resp = await $http.get(`/google-userinfo/${userEmail}`)
+                const resp = await $http.get(`/google-userinfo/${googleAccessToken}`)
                 this.userInfo = resp.data.data
             } catch(error) {
                 console.error(error)
