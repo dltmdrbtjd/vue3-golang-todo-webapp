@@ -1,7 +1,18 @@
 # Vue3-golang-todo-webapp
 
-## 이것저것 고민했던 흔적
-- https://github.com/dltmdrbtjd/vue3-golang-todo-webapp/wiki
+## stack
+- vue3
+- pinia
+- typescript
+- golang
+- gin
+- google oauth2
+- mongodb atlas
+
+## IDE setting
+- VScode
+- Volar
+- Go
 
 ## How to start
 ### What you need before running
