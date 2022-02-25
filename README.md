@@ -1,6 +1,6 @@
 # Vue3-golang-todo-webapp
 
-## Wiki
+## 이것저것 고민했던 흔적
 - https://github.com/dltmdrbtjd/vue3-golang-todo-webapp/wiki
 
 ## How to start
