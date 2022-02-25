@@ -2,9 +2,7 @@
   <header>
     <div class="mx-auto max-w-3xl w-full flex justify-between">
       <ul class="flex items-center">
-        <li>BLOG</li>
         <li v-if="authentication">TODO</li>
-        <li v-if="authentication">ACCOUNT-BOOK</li>
       </ul>
       <div class="flex items-center">
         <p class="mr-4 text-white">{{ userInfo.name }}</p>
